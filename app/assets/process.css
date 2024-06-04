@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-bg {
+    background-image: url('./bg.jpg'); /* Replace with your image path */
+}

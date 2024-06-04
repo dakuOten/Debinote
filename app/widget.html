@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="US" data-theme="wireframe">
+  <head>
+    <meta charset="UTF-8">
+    <script src="https://live.zwidgets.com/js-sdk/1.2/ZohoEmbededAppSDK.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="assets/styles.css">
+
+    <style>
+      .whiteBg{
+          background-color: bg-transparent !important;
+      }
+    </style>
+  </head>
+  <body class="h-screen flex items-center justify-center" >
+
+    <div class="relative w-full h-full">
+      <!-- Blurred Background Image -->
+      <div class="custom-bg bg-cover bg-center absolute inset-0 w-full h-full filter blur-sm"></div>
+      <!-- Overlay with Text -->
+      <div class="hero min-h-screen ">
+        <div class="hero-content text-center">
+          <div class="max-w-md">
+            <!-- Cast Notificaiton  -->
+  
+            <div role="alert" class="alert hidden" id="alert">
+              <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 text-[#d53f3f]" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span>Warning: You cannot access this time tracker as you are not the owner.</span>
+              <div class="content-center">
+                <span class="loading loading-ring loading-sm"></span>
+              </div>
+            </div>
+  
+  
+           <!-- Form builder  -->
+  
+              <form>
+                <div class="space-y-12">
+                  <div class="border-b border-gray-900/10 pb-12">
+                    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+
+
+           <!-- Book Debit Note Name  -->
+
+                      <div class="sm:col-span-6">
+                        <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">Book Debit Note Name</label>
+                        <div class="mt-2">
+                          <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                      </div>
+            
+          <!-- Suppliers Contact Person -->
+
+                      <div class="sm:col-span-3">
+                        <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Suppliers Contact Person</label>
+                        <div class="mt-2">
+                          <select id="Contact_Supplier" name="country" autocomplete="country-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+    
+                          </select>
+                        </div>
+                      </div>
+
+          <!-- Supplier Company Name -->
+
+                      <div class="sm:col-span-3">
+                        <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Supplier Company Name</label>
+                        <div class="mt-2">
+                          <select id="Company_Supplier" name="country" autocomplete="country-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                          </select>
+                        </div>
+                      </div>
+              
+
+                    </div>
+                  </div>
+                </div>
+              
+                <div class="mt-6 flex items-center justify-end gap-x-6">
+                  <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+                  <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
+                </div>
+              </form>
+  
+  
+          </div>
+        </div>
+      </div>
+  </div>
+
+
+
+  </body>
+
+  <script src="logics/app.js" type="module"></script>
+</html>
