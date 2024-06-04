@@ -1,5 +1,5 @@
 import {leaveRunning,moduleRecord,checkUserLogin,getContact,getCompany} from './components/util.js'
-
+import {create} from './components/crud.js'
 
 
 //============================================================================================================================
@@ -7,8 +7,12 @@ import {leaveRunning,moduleRecord,checkUserLogin,getContact,getCompany} from './
 //============================================================================================================================
 let getElement = (id) => document.getElementById(id);
 let alert = getElement('alert');
-let selectContactSupplier = getElement('Contact_Supplier');
-let selectCompanySupplier = getElement('Company_Supplier');
+let selectContactSupplier = getElement('contactSupplier');
+let selectCompanySupplier = getElement('companySupplier');
+let debitNoteOwner = getElement('debitNoteOwner');
+let claimsName = getElement('claimsName');
+let aqueousCaseReference = getElement('aqueousCaseReference');
+let cancelButton = getElement('cancelButton');
 
 
 
@@ -18,21 +22,23 @@ let selectCompanySupplier = getElement('Company_Supplier');
 
 ZOHO.embeddedApp.on("PageLoad", async (data) => {
 
-    getCompany();
-
+    //============================================================================================================================
+    // Static Reponse from modules
+    //============================================================================================================================
     let contacts = await getContact();
     let companies = await getCompany();
-
     let currentData = await data;
 
+
+    
     //============================================================================================================================
     // Check Claim Owner then restrict it
     //============================================================================================================================
 
         async function checkOwnerClaim(id){
         let userDetails = await checkUserLogin();
-        let recordDetails = await moduleRecord(id);
-            
+        let recordDetails = await moduleRecord("Deals",id);
+        console.log(recordDetails)  
         if(userDetails.profile.name === "Administrator" || userDetails.profile.name === "CEO"){
 
             return;   
@@ -52,7 +58,35 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
 
 
     //============================================================================================================================
-    // Assign Contacts to Dropdown Contact Supplier
+    // auto populate field base on the claims records
+    //============================================================================================================================
+
+    
+    async function autoPopulateStaticFields(id){
+        let recordDetails = await moduleRecord("Deals",id);
+
+        if(recordDetails.Owner){
+            let owner = recordDetails.Owner
+            debitNoteOwner.value = owner.name
+        }
+
+        if(recordDetails.Deal_Name){
+            claimsName.value = recordDetails.Deal_Name
+        }
+
+        if(recordDetails.AQUEOUS_Case_Reference){
+            aqueousCaseReference.value = recordDetails.AQUEOUS_Case_Reference
+        }
+
+        }
+
+        autoPopulateStaticFields(currentData.EntityId)
+
+
+
+
+    //============================================================================================================================
+    // Assign Contacts to Dropdown Contact Supplier cant be recreated as usable function because of different playload and api
     //============================================================================================================================
         
         async function associateContact(data){
@@ -70,7 +104,7 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
 
 
     //============================================================================================================================
-    // Assign Contacts to Dropdown Company Supplier
+    // Assign Contacts to Dropdown Company Supplier cant be recreated as usable function because of different playload and api
     //============================================================================================================================  
 
 
@@ -78,7 +112,6 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
 
         for(var item of data){
             var option = document.createElement("option");
-            console.log(item)
             option.value = item.id; // replace with actual value property
             option.text = item.Vendor_Name; // replace with actual text property
             selectCompanySupplier.appendChild(option);
@@ -88,6 +121,14 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
 
     associateCompany(companies)
 
+
+    //============================================================================================================================
+    // Cancel Button
+    //============================================================================================================================ 
+    
+        cancelButton.addEventListener("click",function (e) {
+            leaveRunning()
+        })
 
 })
 ZOHO.embeddedApp.init();

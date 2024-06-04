@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="US" data-theme="wireframe">
+<html lang="US" data-theme="light">
   <head>
     <meta charset="UTF-8">
     <script src="https://live.zwidgets.com/js-sdk/1.2/ZohoEmbededAppSDK.min.js"></script>
@@ -34,7 +34,7 @@
   
            <!-- Form builder  -->
   
-              <form>
+              <form id="debitNoteForm">
                 <div class="space-y-12">
                   <div class="border-b border-gray-900/10 pb-12">
                     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -43,18 +43,28 @@
            <!-- Book Debit Note Name  -->
 
                       <div class="sm:col-span-6">
-                        <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">Book Debit Note Name</label>
+                        <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900 label-text-alt">Book Debit Note Name</label>
                         <div class="mt-2">
-                          <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                          <input type="text" name="debit_note_name" id="debitNoteName" autocomplete="given-name" placeholder="Type here" class="input input-bordered input-sm w-full max-w-xs" >
                         </div>
                       </div>
+
+                    <!-- Debit Notes -->
+
+                    <div class="sm:col-span-6">
+                      <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Debit Note</label>
+                      <div class="mt-2">
+                        <textarea  id="debitNote" placeholder="Type Here .." class="textarea textarea-bordered textarea-sm w-full max-w-xs" ></textarea>
+                      </div>
+                    </div>   
+      
             
           <!-- Suppliers Contact Person -->
 
                       <div class="sm:col-span-3">
                         <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Suppliers Contact Person</label>
                         <div class="mt-2">
-                          <select id="Contact_Supplier" name="country" autocomplete="country-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                          <select id="contactSupplier" name="supplier_contact" autocomplete="country-name" class="select select-bordered select-sm max-w-xs block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
     
                           </select>
                         </div>
@@ -65,10 +75,41 @@
                       <div class="sm:col-span-3">
                         <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Supplier Company Name</label>
                         <div class="mt-2">
-                          <select id="Company_Supplier" name="country" autocomplete="country-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                          <select id="companySupplier" name="supplier_contact" autocomplete="country-name" class="select select-bordered select-sm max-w-xs block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
                           </select>
                         </div>
                       </div>
+
+
+        <!-- Book Debit Note Owner -->
+
+                     <div class="sm:col-span-3">
+                      <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Book Debit Note Owner</label>
+                      <div class="mt-2">
+                        <input type="text" id="debitNoteOwner" placeholder="You can't touch this" class="input input-bordered input-sm w-full max-w-xs" disabled />
+                      </div>
+                    </div>
+
+        <!-- Claims name -->
+
+                    <div class="sm:col-span-3">
+                      <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Claims name</label>
+                      <div class="mt-2">
+                        <input type="text" id="claimsName" placeholder="You can't touch this" class="input input-bordered input-sm w-full max-w-xs" disabled />
+                      </div>
+                    </div>         
+
+       <!-- Aqueous Case Reference -->
+
+                <div class="sm:col-span-3">
+                  <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Aqueous Case Reference</label>
+                  <div class="mt-2">
+                    <input type="text"  id="aqueousCaseReference" placeholder="You can't touch this" class="input input-bordered input-sm w-full max-w-xs" disabled />
+                  </div>
+                </div>  
+
+
+        
               
 
                     </div>
@@ -76,7 +117,7 @@
                 </div>
               
                 <div class="mt-6 flex items-center justify-end gap-x-6">
-                  <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+                  <button type="button" id="cancelButton" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
                   <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
                 </div>
               </form>

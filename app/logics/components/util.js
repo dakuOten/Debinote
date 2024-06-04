@@ -2,8 +2,8 @@ export let leaveRunning = async () => {
     return await ZOHO.CRM.UI.Popup.close();
 }
 
-export let moduleRecord = async (recordId) => { 
-    let recordData = await ZOHO.CRM.API.getRecord({Entity: "Deals", approved: "both", RecordID:recordId })
+export let moduleRecord = async (module,recordId) => { 
+    let recordData = await ZOHO.CRM.API.getRecord({Entity: module.toString(), approved: "both", RecordID:recordId })
     let claimRecord = recordData.data.shift();
     return claimRecord;
 }
@@ -27,3 +27,6 @@ export let getCompany = async () => {
     let vendorsData = await vendors.data;
     return vendorsData;
 }
+
+
+
