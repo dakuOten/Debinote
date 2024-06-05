@@ -33,4 +33,19 @@ export let closeReload = async () =>{
     return await ZOHO.CRM.UI.Popup.closeReload()
 }
 
+export let getRelatedRecords = async (module,recordId,relatedModule) => {
+     let supplierCompanies = await ZOHO.CRM.API.getRelatedRecords({Entity:module.toString(),RecordID:recordId,RelatedList:relatedModule})
+     supplierCompanies = supplierCompanies.data
+     return supplierCompanies
+}
+
+export let fileAttachment = async (module,recordId,file) => {
+
+    const blob = new Blob([file], { type: file.type });
+    let attachmentFile = await ZOHO.CRM.API.attachFile({Entity:module.toString(),RecordID:recordId,File:{Name:file.name,Content:blob}})
+
+    console.log(attachmentFile)
+
+}
+
 

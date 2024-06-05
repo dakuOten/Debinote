@@ -1,4 +1,4 @@
-import {leaveRunning,moduleRecord,checkUserLogin,getContact,getCompany,closeReload} from './components/util.js'
+import {leaveRunning,moduleRecord,checkUserLogin,getContact,getCompany,closeReload,getRelatedRecords,fileAttachment} from './components/util.js'
 import {create} from './components/crud.js'
 
 
@@ -28,12 +28,13 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
     //============================================================================================================================
     // Static Reponse from modules
     //============================================================================================================================
-    let contacts = await getContact();
-    let companies = await getCompany();
     let currentData = await data;
-
+    let supplierCompanies = await getRelatedRecords("Deals",currentData.EntityId,"Vendors25");
+    let supplierContact = await getRelatedRecords("Deals",currentData.EntityId,"Contact_Roles");
 
     
+
+
     //============================================================================================================================
     // Check Claim Owner then restrict it
     //============================================================================================================================
@@ -103,7 +104,7 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
 
         }
 
-        associateContact(contacts)
+        associateContact(supplierContact)
 
 
     //============================================================================================================================
@@ -115,14 +116,15 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
 
         for(var item of data){
             var option = document.createElement("option");
-            option.value = item.id; // replace with actual value property
-            option.text = item.Vendor_Name; // replace with actual text property
+            let companySupplier = item.Companies_Involve
+            option.value = companySupplier.id; // replace with actual value property
+            option.text = companySupplier.name; // replace with actual text property
             selectCompanySupplier.appendChild(option);
         }
 
     }
 
-    associateCompany(companies)
+    associateCompany(supplierCompanies)
 
     //============================================================================================================================
     // Create Record
@@ -137,8 +139,8 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
 
         let debitNoteName = getElement('debitNoteName');
         let debitNote = getElement('debitNote');
+        let debitFile = getElement('debitFile').files[0];
         let recordDetails = await moduleRecord("Deals",currentData.EntityId);
-
         let owner = recordDetails.Owner || ""
         let claimsName = recordDetails.id
         let aqueousCaseReference = recordDetails.AQUEOUS_Case_Reference
@@ -146,7 +148,7 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
         let debitNoteInput = debitNote.value;
         let supplierContact = selectContactSupplier.value;
         let supplierCompany = selectCompanySupplier.value;
-
+        
         let payload = {
             Owner : owner.id,
             Aqueous_Case_Reference : aqueousCaseReference,
@@ -163,6 +165,8 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
         
         if (createdData.code === "SUCCESS") {
             let debitId = createdData.details.id;
+
+            fileAttachment("Book_Debit_Notes",debitId,debitFile)
             let divAnchor = getElement('redirectButton');
             let alertMessage = getElement('createdSuccessfully');
             

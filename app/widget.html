@@ -25,7 +25,7 @@
   
             <div role="alert" class="alert hidden" id="alert">
               <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 text-[#d53f3f]" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              <span>Warning: You cannot access this time tracker as you are not the owner.</span>
+              <span>Warning: You cannot access this Debit Note as you are not the owner.</span>
               <div class="content-center">
                 <span class="loading loading-ring loading-sm"></span>
               </div>
@@ -37,7 +37,7 @@
               <form id="debitNoteForm">
                 <div class="space-y-12">
                   <div class="border-b border-gray-900/10 pb-12">
-                    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div class="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
                       <div class="sm:col-span-6">
                         <div role="alert" class="alert hidden" id="createdSuccessfully">
@@ -66,6 +66,16 @@
                           <input type="text" name="debit_note_name" id="debitNoteName" autocomplete="given-name" placeholder="Type here" class="input input-bordered input-sm w-full max-w-xs" required>
                         </div>
                       </div>
+
+
+          <!-- Debit File Attachment -->
+
+                               <div class="sm:col-span-6">
+                                <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Debit Attachment</label>
+                                <div class="mt-2">
+                                  <input type="file" id="debitFile" class="file-input file-input-bordered file-input-sm w-full max-w-xs" />
+                                </div>
+                              </div>              
 
                     <!-- Debit Notes -->
 
@@ -126,7 +136,7 @@
                   </div>
                 </div>  
 
-
+                
         
               
 
