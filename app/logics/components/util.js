@@ -29,4 +29,8 @@ export let getCompany = async () => {
 }
 
 
+export let closeReload = async () =>{
+    return await ZOHO.CRM.UI.Popup.closeReload()
+}
+
 

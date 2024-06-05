@@ -1,4 +1,4 @@
-import {leaveRunning,moduleRecord,checkUserLogin,getContact,getCompany} from './components/util.js'
+import {leaveRunning,moduleRecord,checkUserLogin,getContact,getCompany,closeReload} from './components/util.js'
 import {create} from './components/crud.js'
 
 
@@ -6,16 +6,19 @@ import {create} from './components/crud.js'
 // Global element variable
 //============================================================================================================================
 let getElement = (id) => document.getElementById(id);
-let alert = getElement('alert');
-let selectContactSupplier = getElement('contactSupplier');
-let selectCompanySupplier = getElement('companySupplier');
+let alertMessage = getElement('alert');
+let cancelButton = getElement('cancelButton');
+let debitNoteForm = getElement('debitNoteForm');
+//============================================================================================================================
+// form fields
+//============================================================================================================================
 let debitNoteOwner = getElement('debitNoteOwner');
 let claimsName = getElement('claimsName');
 let aqueousCaseReference = getElement('aqueousCaseReference');
-let cancelButton = getElement('cancelButton');
-
-
-
+let selectContactSupplier = getElement('contactSupplier');
+let selectCompanySupplier = getElement('companySupplier');
+let debitNoteName = getElement('debitNoteName');
+let debitNote = getElement('debitNote');
 //============================================================================================================================
 // Initialize Pageload
 //============================================================================================================================
@@ -46,7 +49,7 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
 
         if(  userDetails.id !== recordDetails.Owner.id ){
            await ZOHO.CRM.UI.Resize({height:"120",width:"400"})
-           alert.classList.remove('hidden');
+           alertMessage.classList.remove('hidden');
             setTimeout(() => {
                 leaveRunning()
               }, 5000);
@@ -120,6 +123,78 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
     }
 
     associateCompany(companies)
+
+    //============================================================================================================================
+    // Create Record
+    //============================================================================================================================  
+    
+
+
+
+
+    debitNoteForm.addEventListener('submit',  async function(e){
+        e.preventDefault();
+
+        let debitNoteName = getElement('debitNoteName');
+        let debitNote = getElement('debitNote');
+        let recordDetails = await moduleRecord("Deals",currentData.EntityId);
+
+        let owner = recordDetails.Owner || ""
+        let claimsName = recordDetails.id
+        let aqueousCaseReference = recordDetails.AQUEOUS_Case_Reference
+        let debitNoteNameInput = debitNoteName.value;
+        let debitNoteInput = debitNote.value;
+        let supplierContact = selectContactSupplier.value;
+        let supplierCompany = selectCompanySupplier.value;
+
+        let payload = {
+            Owner : owner.id,
+            Aqueous_Case_Reference : aqueousCaseReference,
+            Claims_name	: claimsName,
+            Name : debitNoteNameInput,
+            Custom_Note	: debitNoteInput,
+            Suppliers_Contact_Person : supplierContact,
+            Company_Name : supplierCompany
+        }
+
+        let createBookDebitNotes = await create("Book_Debit_Notes",payload)
+
+        let createdData = createBookDebitNotes.data.shift();
+        
+        if (createdData.code === "SUCCESS") {
+            let debitId = createdData.details.id;
+            let divAnchor = getElement('redirectButton');
+            let alertMessage = getElement('createdSuccessfully');
+            
+            // Check if an anchor already exists
+            let existingAnchor = divAnchor.querySelector('a');
+            if (!existingAnchor) {
+                // Create the anchor element if it doesn't exist
+                existingAnchor = document.createElement('a');
+                divAnchor.appendChild(existingAnchor);
+            }
+            
+            // Update the anchor properties
+            existingAnchor.href = `https://crm.zoho.com/crm/aqueous/tab/CustomModule12/${debitId}`;
+            existingAnchor.target = '_blank';
+            existingAnchor.classList.add('text-blue-500');
+            existingAnchor.textContent = 'Click here to redirect to Debit Note';
+            
+            alertMessage.classList.remove('hidden');
+            setTimeout(() => {
+                alertMessage.classList.add('hidden');
+                debitNoteName.value = "";
+                debitNote.value = "";
+            }, 6000);
+        }
+
+        
+
+
+
+    });
+
+
 
 
     //============================================================================================================================
