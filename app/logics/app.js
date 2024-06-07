@@ -1,4 +1,4 @@
-import {leaveRunning,moduleRecord,checkUserLogin,getContact,getCompany,closeReload,getRelatedRecords,fileAttachment} from './components/util.js'
+import {leaveRunning,moduleRecord,checkUserLogin,getContact,getCompany,closeReload,getRelatedRecords,fileAttachment,addNotes} from './components/util.js'
 import {create} from './components/crud.js'
 
 
@@ -9,6 +9,9 @@ let getElement = (id) => document.getElementById(id);
 let alertMessage = getElement('alert');
 let cancelButton = getElement('cancelButton');
 let debitNoteForm = getElement('debitNoteForm');
+let closeModal = getElement('closeModalButton');
+let modal = getElement('my_modal_3');
+let contactSelect = getElement('contactSelect');
 //============================================================================================================================
 // form fields
 //============================================================================================================================
@@ -33,6 +36,7 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
     let supplierContact = await getRelatedRecords("Deals",currentData.EntityId,"Contact_Roles");
 
     
+    console.log(supplierCompanies)
 
 
     //============================================================================================================================
@@ -87,26 +91,6 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
         autoPopulateStaticFields(currentData.EntityId)
 
 
-
-
-    //============================================================================================================================
-    // Assign Contacts to Dropdown Contact Supplier cant be recreated as usable function because of different playload and api
-    //============================================================================================================================
-        
-        async function associateContact(data){
-
-            for(var item of data){
-                var option = document.createElement("option");
-                option.value = item.id; // replace with actual value property
-                option.text = item.Full_Name; // replace with actual text property
-                selectContactSupplier.appendChild(option);
-            }
-
-        }
-
-        associateContact(supplierContact)
-
-
     //============================================================================================================================
     // Assign Contacts to Dropdown Company Supplier cant be recreated as usable function because of different playload and api
     //============================================================================================================================  
@@ -127,24 +111,57 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
     associateCompany(supplierCompanies)
 
     //============================================================================================================================
+    // Assign Contacts to Dropdown Contact Supplier cant be recreated as usable function because of different playload and api
+    //============================================================================================================================
+
+    selectCompanySupplier.addEventListener('change',  async function(e){
+       let recordId = selectCompanySupplier.value;
+
+       if(recordId){
+        contactSelect.classList.remove('hidden');
+       }   
+
+       selectContactSupplier.innerHTML = '';
+       selectContactSupplier.innerHTML = '<option value="" disabled selected>Select Contact</option>';
+
+       let contactRelated = await getRelatedRecords("Vendors",recordId,"Contacts");
+        if(contactRelated){
+            for(var item of contactRelated){
+                var option = document.createElement("option");
+                option.value = item.id; // replace with actual value property
+                option.text = item.Full_Name; // replace with actual text property
+                selectContactSupplier.appendChild(option);
+            }
+        }
+        else{
+            contactSelect.classList.add('hidden');
+           }
+    })
+
+
+    //============================================================================================================================
     // Create Record
     //============================================================================================================================  
     
 
 
-
+    
 
     debitNoteForm.addEventListener('submit',  async function(e){
         e.preventDefault();
 
         let debitNoteName = getElement('debitNoteName');
+        let debitNoteTitle = getElement('debitNoteTitle');
+        let contactSupplier = getElement('contactSupplier');
         let debitNote = getElement('debitNote');
         let debitFile = getElement('debitFile').files[0];
         let recordDetails = await moduleRecord("Deals",currentData.EntityId);
         let owner = recordDetails.Owner || ""
         let claimsName = recordDetails.id
+
         let aqueousCaseReference = recordDetails.AQUEOUS_Case_Reference
         let debitNoteNameInput = debitNoteName.value;
+        let debitNoteInputTitle = debitNoteTitle.value;
         let debitNoteInput = debitNote.value;
         let supplierContact = selectContactSupplier.value;
         let supplierCompany = selectCompanySupplier.value;
@@ -156,7 +173,8 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
             Name : debitNoteNameInput,
             Custom_Note	: debitNoteInput,
             Suppliers_Contact_Person : supplierContact,
-            Company_Name : supplierCompany
+            Company_Name : supplierCompany ,
+            trigger_workflow : true
         }
 
         let createBookDebitNotes = await create("Book_Debit_Notes",payload)
@@ -166,6 +184,7 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
         if (createdData.code === "SUCCESS") {
             let debitId = createdData.details.id;
 
+            addNotes("Book_Debit_Notes",debitId,debitNoteInputTitle,debitNoteInput)
             fileAttachment("Book_Debit_Notes",debitId,debitFile)
             let divAnchor = getElement('redirectButton');
             let alertMessage = getElement('createdSuccessfully');
@@ -188,7 +207,12 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
             setTimeout(() => {
                 alertMessage.classList.add('hidden');
                 debitNoteName.value = "";
+                debitNoteTitle.value = "";
                 debitNote.value = "";
+                selectCompanySupplier.value = '';
+                selectContactSupplier.value = '';
+                getElement('debitFile').value = "";
+                contactSelect.classList.add('hidden');
             }, 6000);
         }
 
@@ -209,5 +233,12 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
             leaveRunning()
         })
 
+    //============================================================================================================================
+    // close modal
+    //============================================================================================================================      
+
+         closeModal.addEventListener("click", function(){
+            modal.close();
+         })
 })
 ZOHO.embeddedApp.init();

@@ -36,8 +36,8 @@
   
               <form id="debitNoteForm">
                 <div class="space-y-12">
-                  <div class="border-b border-gray-900/10 pb-12">
-                    <div class="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                  <div class="border-b border-gray-900/10 pb-6">
+                    <div class="mt-5 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
 
                       <div class="sm:col-span-6">
                         <div role="alert" class="alert hidden" id="createdSuccessfully">
@@ -51,93 +51,121 @@
                             </div>
                       
                             <div id="redirectButton" class="flex justify-center">
-                              <!-- The anchor tag will be inserted here by JavaScript -->
+                 <!-- The anchor tag will be inserted here by JavaScript -->
                             </div>
                           </div>
                         </div>
                       </div>
                                   
 
-           <!-- Book Debit Note Name  -->
+                  <!-- Book Debit Note Name  -->
 
                       <div class="sm:col-span-6">
                         <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900 label-text-alt">Book Debit Note Name</label>
-                        <div class="mt-2">
+                        <div class="mt-1">
                           <input type="text" name="debit_note_name" id="debitNoteName" autocomplete="given-name" placeholder="Type here" class="input input-bordered input-sm w-full max-w-xs" required>
                         </div>
                       </div>
 
-
-          <!-- Debit File Attachment -->
-
-                               <div class="sm:col-span-6">
-                                <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Debit Attachment</label>
-                                <div class="mt-2">
-                                  <input type="file" id="debitFile" class="file-input file-input-bordered file-input-sm w-full max-w-xs" required/>
-                                </div>
-                              </div>              
-
-                    <!-- Debit Notes -->
+                    <!-- Supplier Company Name -->
 
                     <div class="sm:col-span-6">
-                      <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Debit Note</label>
-                      <div class="mt-2">
-                        <textarea  id="debitNote" placeholder="Type Here .." class="textarea textarea-bordered textarea-sm w-full max-w-xs" required></textarea>
-                      </div>
-                    </div>   
-      
-            
-          <!-- Suppliers Contact Person -->
-
-                      <div class="sm:col-span-3">
-                        <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Suppliers Contact Person</label>
-                        <div class="mt-2">
-                          <select id="contactSupplier" name="supplier_contact" autocomplete="country-name" class="select select-bordered select-sm max-w-xs block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-    
-                          </select>
-                        </div>
-                      </div>
-
-          <!-- Supplier Company Name -->
-
-                      <div class="sm:col-span-3">
-                        <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Supplier Company Name</label>
-                        <div class="mt-2">
-                          <select id="companySupplier" name="supplier_contact" autocomplete="country-name" class="select select-bordered select-sm max-w-xs block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                          </select>
-                        </div>
-                      </div>
-
-
-        <!-- Book Debit Note Owner -->
-
-                     <div class="sm:col-span-3">
-                      <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Book Debit Note Owner</label>
-                      <div class="mt-2">
-                        <input type="text" id="debitNoteOwner"  class="input input-bordered input-sm w-full max-w-xs" disabled />
+                      <label for="supplier_company" class="block text-sm font-medium leading-6 text-gray-900">Supplier Company Name</label>
+                      <div class="mt-1">
+                        <select id="companySupplier" name="supplier_contact" autocomplete="supplier_company" class="select select-bordered select-sm max-w-xs block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                          <option value="" disabled selected>Select Company</option>
+                        </select>
                       </div>
                     </div>
 
-        <!-- Claims name -->
 
-                    <div class="sm:col-span-3">
-                      <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Claims Name</label>
-                      <div class="mt-2">
-                        <input type="text" id="claimsName"  class="input input-bordered input-sm w-full max-w-xs" disabled />
+                    <!-- Suppliers Contact Person -->
+
+                    <div class="sm:col-span-6 hidden" id="contactSelect">
+                      <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Suppliers Contact Person</label>
+                      <div class="mt-1">
+                        <select id="contactSupplier" name="supplier_contact" autocomplete="country-name" class="select select-bordered select-sm max-w-xs block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                          <option value="" disabled selected>Select Contact</option>
+                        </select>
                       </div>
-                    </div>         
+                    </div>
 
-       <!-- Aqueous Case Reference -->
 
-                <div class="sm:col-span-3">
-                  <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Aqueous Case Reference</label>
-                  <div class="mt-2">
-                    <input type="text"  id="aqueousCaseReference"  class="input input-bordered input-sm w-full max-w-xs" disabled />
-                  </div>
-                </div>  
+                   <!-- Book Debit Note Tile  -->
+                   <div class="sm:col-span-3">
+                    <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900 label-text-alt ">Debit Note :</label>
+                  </div>      
 
+                    <div class="sm:col-span-6">
+                      <label for="first-name" class="block text-[11px] font-medium   leading-6 text-gray-900 label-text-alt ">Debit Note Title</label>
+                      <div class="mt-1">
+                        <input type="text" id="debitNoteTitle" autocomplete="given-name" placeholder="Type here" class="input input-bordered input-sm w-full max-w-xs" required>
+                      </div>
+                    </div>                     
+
+                    <!-- Debit Notes  Conent-->
+
+                    <div class="sm:col-span-6">
+                      <label for="Debit Content" class="block text-[11px] font-medium   leading-6 text-gray-900">Debit Note Content</label>
+                      <div class="mt-1">
+                        <textarea  id="debitNote" placeholder="Type Here .." class="textarea textarea-bordered textarea-sm w-full max-w-xs" required></textarea>
+                      </div>
+                    </div>   
+                    
+
+                  <!-- Debit File Attachment -->
+
+                  <div class="sm:col-span-6">
+                    <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Debit Attachment</label>
+                    <div class="mt-1">
+                      <input type="file" id="debitFile" class="file-input file-input-bordered file-input-sm w-full max-w-xs" required/>
+                    </div>
+                  </div>    
+                          
                 
-        
+
+
+
+
+                      <!-- Open the modal using ID.showModal() method -->
+                      <button type="button" class="btn btn-active btn-ghost p-1 w-[75px] hidden" onclick="my_modal_3.showModal()">Static Records</button>
+
+                      <dialog id="my_modal_3" class="modal">
+                        <div class="modal-box">
+                            <!-- Close the modal using ID.showModal() method -->
+                        <button id="closeModalButton" type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+
+                      <div class="flex justify-center items-center flex-col ...">
+                            <!-- Book Debit Note Owner -->
+
+                        <div class="sm:col-span-3">
+                        <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Book Debit Note Owner</label>
+                            <div class="mt-1">
+                              <input type="text" id="debitNoteOwner"  class="input input-bordered input-sm w-full max-w-xs" disabled />
+                            </div>
+                        </div>
+
+                        <!-- Claims name -->
+
+                                    <div class="sm:col-span-3">
+                                      <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Claims Name</label>
+                                      <div class="mt-1">
+                                        <input type="text" id="claimsName"  class="input input-bordered input-sm w-full max-w-xs" disabled />
+                                      </div>
+                                    </div>         
+
+                      <!-- Aqueous Case Reference -->
+
+                                <div class="sm:col-span-3">
+                                  <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Aqueous Case Reference</label>
+                                  <div class="mt-1">
+                                    <input type="text"  id="aqueousCaseReference"  class="input input-bordered input-sm w-full max-w-xs" disabled />
+                                  </div>
+                                </div>  
+
+                            </div>
+                        </div>
+                      </dialog>
               
 
                     </div>
