@@ -10,14 +10,25 @@
       .whiteBg{
           background-color: bg-transparent !important;
       }
+      .no-margin-top {
+    margin-top: 0 !important;
+  }
     </style>
   </head>
+<<<<<<< HEAD
   <body class="bg-gray-100 flex  flex-col min-h-screen">
+=======
+  <body class="bg-gray-100 flex min-h-screen">
+>>>>>>> e5d1581f3bb7d56433349b52e72eb80a02494c47
     <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w">
         
       <div role="alert" class="alert hidden" id="alert">
         <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 text-[#d53f3f]" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+<<<<<<< HEAD
         <span>Warning: You cannot access this Invoice as you are not the owner.</span>
+=======
+        <span>Warning: You cannot access this Debit Note as you are not the owner.</span>
+>>>>>>> e5d1581f3bb7d56433349b52e72eb80a02494c47
         <div class="content-center">
           <span class="loading loading-ring loading-sm"></span>
         </div>
@@ -25,6 +36,30 @@
 
 
 
+<<<<<<< HEAD
+=======
+      
+      <!-- <div class="sm:col-span-6">
+        <div role="alert" class="alert hidden" id="createdSuccessfully">
+          <div class="flex flex-col items-center justify-center mx-auto">
+            <div class="flex items-center justify-center mx-auto">
+              <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mx-8" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="px-6 mx-10">Your entry has been successfully created!</span>
+              <span class="loading loading-ring loading-sm mx-8"></span>
+            </div>
+        
+            <div id="redirectButton" class="flex justify-center">
+
+            </div>
+            <button type="button" id="cancelButton" class="text-sm font-semibold leading-6 text-gray-900">Close</button>
+          </div>
+        </div>
+      </div> -->
+
+
+>>>>>>> e5d1581f3bb7d56433349b52e72eb80a02494c47
       <div role="alert" class="alert hidden" id="createdSuccessfully">
         <div class="flex flex-col items-center justify-center mx-auto">
           <div class="flex items-center justify-center mx-auto">
@@ -35,6 +70,7 @@
             <span class="loading loading-ring loading-sm mx-8"></span>
           </div>
       
+<<<<<<< HEAD
           <div id="redirectButton" class="flex justify-center">
           </div>
           <button type="button" id="cancelButton" class="btn text-sm font-semibold py-1 px-5 bg-red-900 leading-2 text-white rounded-full shadow-md hover:bg-violet-700 focus:outline-none focus:ring focus:ring-red-950 focus:ring-opacity-75">Close</button>
@@ -48,6 +84,21 @@
           <p  id="validSE" class="text-red-900  text-sm  hidden">End time should not be ahead of start time</p>
         </div>
      <!-- Form builder  -->
+=======
+          <div id="redirectButton" class="flex justify-center my-2">
+
+          </div>
+          <button type="button" id="cancelButton" class="btn text-sm font-semibold py-1 px-5 bg-red-900 leading-2 text-white rounded-full shadow-md hover:bg-violet-700 focus:outline-none focus:ring focus:ring-red-950 focus:ring-opacity-75">Close</button>
+        </div>
+      </div>
+
+
+     <!-- Form builder  -->
+     <div class="sm:col-span-6">
+      <p  id="requiredSCN" class="text-red-900  text-sm  hidden">This Supplier Company Name is required</p>
+      <p  id="requiredSCP" class="text-red-900  text-sm  hidden">This Suppliers Contact Person is required</p>
+    </div>
+>>>>>>> e5d1581f3bb7d56433349b52e72eb80a02494c47
 
         <form id="debitNoteForm">
           <div class="space-y-12">
@@ -56,6 +107,7 @@
 
 
 
+<<<<<<< HEAD
 
                     <!-- Record Invoice Name  -->
 
@@ -162,6 +214,121 @@
                         </div>    
 
 
+=======
+            
+
+            <!-- Book Debit Note Name  -->
+
+                <div class="sm:col-span-6">
+                  <label for="first-name" class="block text-sm font-medium leading-2 text-gray-900 label-text-alt">Record Name</label>
+                  <div class="mt-1">
+                    <input type="text" name="debit_note_name" id="debitNoteName" autocomplete="given-name" placeholder="Type here" class="input input-bordered input-sm  w-[300px]" required>
+                  </div>
+                </div>
+
+              <!-- Supplier Company Name -->
+
+              <div class="sm:col-span-6">
+                <label for="supplier_company" class="block text-sm font-medium leading-6 text-gray-900">Supplier Company Name</label>
+                <div class="mt-1">
+                  <select id="companySupplier" name="supplier_contact" autocomplete="supplier_company" class="select select-bordered select-sm block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 w-[600px] sm:text-sm sm:leading-6">
+                    <option value="" disabled selected>Select Company</option>
+                  </select>
+                </div>
+              </div>
+
+ 
+
+
+              <!-- Suppliers Contact Person -->
+              <div class="sm:col-span-6 hidden" id="contactSelect">
+                <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Suppliers Contact Person</label>
+                <div class="mt-1">
+                  <select id="contactSupplier" name="supplier_contact" autocomplete="country-name" class="select select-bordered select-sm block  rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 w-[600px] sm:text-sm sm:leading-6">
+                    <option value="" disabled selected>Select Contact</option>
+                  </select>
+       
+                </div>
+              </div>
+
+
+
+             <!-- Book Debit Note Tile  -->
+              <div class=" grid grid-cols-1 gap-y-1 sm:grid-cols-3">
+                   <div class="sm:col-span-3">
+                    <label for="first-name" class="block text-sm font-medium leading-2 text-gray-900 label-text-alt ">Add Note :</label>
+                  </div>   
+
+                <div class="sm:col-span-6">
+                  <label for="first-name" class="block text-[11px] font-medium leading-6 text-gray-900 label-text-alt">Note Title</label>
+                  <div class="no-margin-top">
+                    <input type="text" id="debitNoteTitle" autocomplete="given-name" placeholder="Type here" class="input input-bordered input-sm w-[300px]" required>
+                  </div>
+                </div>                     
+                
+                <!-- Debit Notes Content -->
+                
+                <div class="sm:col-span-6">
+                  <label for="Debit Content" class="block text-[11px] font-medium leading-6 text-gray-900">Note Content</label>
+                  <div class="no-margin-top">
+                    <textarea id="debitNote" placeholder="Type Here .." class="textarea textarea-bordered textarea-sm  w-[600px]  focus:ring-indigo-600" required></textarea>
+                  </div>
+                </div>
+                  
+              </div>
+
+                <!-- Debit File Attachment -->
+
+                <div class="sm:col-span-6">
+                  <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Attachment</label>
+                  <div class="mt-1">
+                    <input type="file" id="debitFile" class="file-input file-input-bordered file-input-sm w-full max-w-xs" required/>
+                  </div>
+                </div>    
+
+
+
+
+                <!-- Open the modal using ID.showModal() method -->
+                <button type="button" class="btn btn-active btn-ghost p-1 w-[75px] hidden" onclick="my_modal_3.showModal()">Static Records</button>
+
+                <dialog id="my_modal_3" class="modal">
+                  <div class="modal-box">
+                      <!-- Close the modal using ID.showModal() method -->
+                  <button id="closeModalButton" type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+
+                <div class="flex justify-center items-center flex-col ...">
+                      <!-- Book Debit Note Owner -->
+
+                  <div class="sm:col-span-3">
+                  <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Book Debit Note Owner</label>
+                      <div class="mt-1">
+                        <input type="text" id="debitNoteOwner"  class="input input-bordered input-sm w-full max-w-xs" disabled />
+                      </div>
+                  </div>
+
+                  <!-- Claims name -->
+
+                              <div class="sm:col-span-3">
+                                <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Claims Name</label>
+                                <div class="mt-1">
+                                  <input type="text" id="claimsName"  class="input input-bordered input-sm w-full max-w-xs" disabled />
+                                </div>
+                              </div>         
+
+                <!-- Aqueous Case Reference -->
+
+                          <div class="sm:col-span-3">
+                            <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Aqueous Case Reference</label>
+                            <div class="mt-1">
+                              <input type="text"  id="aqueousCaseReference"  class="input input-bordered input-sm w-full max-w-xs" disabled />
+                            </div>
+                          </div>  
+
+                      </div>
+                  </div>
+                </dialog>
+>>>>>>> e5d1581f3bb7d56433349b52e72eb80a02494c47
         
 
               </div>

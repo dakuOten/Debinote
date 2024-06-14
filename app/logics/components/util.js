@@ -43,14 +43,22 @@ export let fileAttachment = async (module,recordId,file) => {
 
     let blob = new Blob([file], { type: file.type });
     let attach = await ZOHO.CRM.API.attachFile({Entity:module.toString(),RecordID:recordId,File:{Name:file.name,Content:blob}})
+<<<<<<< HEAD
 
+=======
+    console.log(attach)
+>>>>>>> e5d1581f3bb7d56433349b52e72eb80a02494c47
 
 }
 
 
 export let addNotes = async (module,recordId,TitleNote,Content) => {
    let addnote =  await ZOHO.CRM.API.addNotes({Entity:module.toString(),RecordID:recordId,Title:TitleNote,Content:Content})
+<<<<<<< HEAD
 
+=======
+   console.log(addnote)
+>>>>>>> e5d1581f3bb7d56433349b52e72eb80a02494c47
 }
 
 
