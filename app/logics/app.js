@@ -1,5 +1,7 @@
-import {leaveRunning,moduleRecord,checkUserLogin,getContact,getCompany,closeReload,getRelatedRecords,fileAttachment} from './components/util.js'
+import {leaveRunning,moduleRecord,checkUserLogin,getContact,getCompany,closeReload,getRelatedRecords,fileAttachment,addNotes,reSize} from './components/util.js'
 import {create} from './components/crud.js'
+
+
 
 
 //============================================================================================================================
@@ -9,16 +11,15 @@ let getElement = (id) => document.getElementById(id);
 let alertMessage = getElement('alert');
 let cancelButton = getElement('cancelButton');
 let debitNoteForm = getElement('debitNoteForm');
+let contactSelect = getElement('contactSelect');
+let cancelButtonForm = getElement('cancelButtonForm');
 //============================================================================================================================
 // form fields
 //============================================================================================================================
-let debitNoteOwner = getElement('debitNoteOwner');
-let claimsName = getElement('claimsName');
-let aqueousCaseReference = getElement('aqueousCaseReference');
-let selectContactSupplier = getElement('contactSupplier');
-let selectCompanySupplier = getElement('companySupplier');
-let debitNoteName = getElement('debitNoteName');
-let debitNote = getElement('debitNote');
+let clubCaseAccounts = getElement('clubCaseAccounts');
+let clubCaseContact = getElement('clubCaseContact');
+let vessels = getElement('vessels');
+
 //============================================================================================================================
 // Initialize Pageload
 //============================================================================================================================
@@ -29,28 +30,27 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
     // Static Reponse from modules
     //============================================================================================================================
     let currentData = await data;
-    let supplierCompanies = await getRelatedRecords("Deals",currentData.EntityId,"Vendors25");
-    let supplierContact = await getRelatedRecords("Deals",currentData.EntityId,"Contact_Roles");
+    let checkCurrentDetails = await moduleRecord("Deals",currentData.EntityId);
+    let checkAccountRecord = checkCurrentDetails;
 
     
-
-
-    //============================================================================================================================
-    // Check Claim Owner then restrict it
-    //============================================================================================================================
+    // //============================================================================================================================
+    // // Check Claim Owner then restrict it
+    // //============================================================================================================================
 
         async function checkOwnerClaim(id){
         let userDetails = await checkUserLogin();
         let recordDetails = await moduleRecord("Deals",id);
-        console.log(recordDetails)  
         if(userDetails.profile.name === "Administrator" || userDetails.profile.name === "CEO"){
 
             return;   
         }
 
         if(  userDetails.id !== recordDetails.Owner.id ){
-           await ZOHO.CRM.UI.Resize({height:"120",width:"400"})
+           await ZOHO.CRM.UI.Resize({height:"110",width:"400"})
            alertMessage.classList.remove('hidden');
+           debitNoteForm.classList.add('hidden')
+           document.body.style.overflow = 'hidden';
             setTimeout(() => {
                 leaveRunning()
               }, 5000);
@@ -61,112 +61,155 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
         checkOwnerClaim(currentData.EntityId)
 
 
-    //============================================================================================================================
-    // auto populate field base on the claims records
-    //============================================================================================================================
-
-    
-    async function autoPopulateStaticFields(id){
-        let recordDetails = await moduleRecord("Deals",id);
-
-        if(recordDetails.Owner){
-            let owner = recordDetails.Owner
-            debitNoteOwner.value = owner.name
-        }
-
-        if(recordDetails.Deal_Name){
-            claimsName.value = recordDetails.Deal_Name
-        }
-
-        if(recordDetails.AQUEOUS_Case_Reference){
-            aqueousCaseReference.value = recordDetails.AQUEOUS_Case_Reference
-        }
-
-        }
-
-        autoPopulateStaticFields(currentData.EntityId)
-
-
-
-
-    //============================================================================================================================
-    // Assign Contacts to Dropdown Contact Supplier cant be recreated as usable function because of different playload and api
-    //============================================================================================================================
+    // //============================================================================================================================
+    // // Assign Contacts to Dropdown Contact Supplier cant be recreated as usable function because of different playload and api
+    // //============================================================================================================================
         
         async function associateContact(data){
+            
+            clubCaseAccounts.value = data.name
+            let checkAccount = await getRelatedRecords("Accounts",data.id,"Contacts");
 
-            for(var item of data){
+
+            if(checkAccount){
+                contactSelect.classList.remove('hidden');
+            }
+
+            for(var item of checkAccount){
                 var option = document.createElement("option");
                 option.value = item.id; // replace with actual value property
                 option.text = item.Full_Name; // replace with actual text property
-                selectContactSupplier.appendChild(option);
+                clubCaseContact.appendChild(option);
             }
 
         }
 
-        associateContact(supplierContact)
+        associateContact(checkAccountRecord.Account_Name)
 
 
-    //============================================================================================================================
-    // Assign Contacts to Dropdown Company Supplier cant be recreated as usable function because of different playload and api
-    //============================================================================================================================  
+    // //============================================================================================================================
+    // // Assign Contacts to Dropdown Contact Supplier cant be recreated as usable function because of different playload and api
+    // //============================================================================================================================
+        
+    async function associateVessels(id){
+            
+
+        let checkVessels = await getRelatedRecords("Deals",id,"Vessels19");
 
 
-        async function associateCompany(data){
 
-        for(var item of data){
+        for(var item of checkVessels){
             var option = document.createElement("option");
-            let companySupplier = item.Companies_Involve
-            option.value = companySupplier.id; // replace with actual value property
-            option.text = companySupplier.name; // replace with actual text property
-            selectCompanySupplier.appendChild(option);
+            option.value = item.Vessels_linked_to_this_Claim_case.id; // replace with actual value property
+            option.text = item.Vessels_linked_to_this_Claim_case.name; // replace with actual text property
+            vessels.appendChild(option);
         }
 
     }
 
-    associateCompany(supplierCompanies)
-
-    //============================================================================================================================
-    // Create Record
-    //============================================================================================================================  
-    
+    associateVessels(checkAccountRecord.id)
 
 
+    // //============================================================================================================================
+    // // Create Record
+    // //============================================================================================================================  
 
 
     debitNoteForm.addEventListener('submit',  async function(e){
         e.preventDefault();
 
-        let debitNoteName = getElement('debitNoteName');
-        let debitNote = getElement('debitNote');
-        let debitFile = getElement('debitFile').files[0];
+        let validSE = getElement('validSE');
+        let recordName = getElement('recordName');
+        let reimbursement = getElement('reimbursement');
+        let clubCaseContact = getElement('clubCaseContact');
+        let startTime = getElement('startTime');
+        let endTime = getElement('endTime');
+        let noteTitle = getElement('noteTitle');
+        let noteContent = getElement('noteContent');
+        let requiredV = getElement('requiredV');
+        let requiredCCC = getElement('requiredCCC');
+        let submitDebit = getElement('submitDebit');
+
+     
+        let file = getElement('Attachment').files[0];
+   
         let recordDetails = await moduleRecord("Deals",currentData.EntityId);
-        let owner = recordDetails.Owner || ""
+        let claimOwner = recordDetails.Owner.id
         let claimsName = recordDetails.id
-        let aqueousCaseReference = recordDetails.AQUEOUS_Case_Reference
-        let debitNoteNameInput = debitNoteName.value;
-        let debitNoteInput = debitNote.value;
-        let supplierContact = selectContactSupplier.value;
-        let supplierCompany = selectCompanySupplier.value;
+        let accountID = recordDetails.Account_Name.id
+
+
+        let error = [];
         
-        let payload = {
-            Owner : owner.id,
-            Aqueous_Case_Reference : aqueousCaseReference,
-            Claims_name	: claimsName,
-            Name : debitNoteNameInput,
-            Custom_Note	: debitNoteInput,
-            Suppliers_Contact_Person : supplierContact,
-            Company_Name : supplierCompany
+        if(startTime.value > endTime.value){
+            validSE.classList.remove('hidden');
+            setTimeout(() => {
+                validSE.classList.add('hidden');
+                startTime.value = "";
+                endTime.value = "";
+            }, 4000);
+            error.push(true)
         }
 
-        let createBookDebitNotes = await create("Book_Debit_Notes",payload)
+        if(!vessels.value){
+            requiredV.classList.remove('hidden');
+            setTimeout(() => {
+                requiredV.classList.add('hidden');
+            }, 4000);
+            error.push(true)
+        }
 
-        let createdData = createBookDebitNotes.data.shift();
+        if(!clubCaseContact.value){
+            requiredCCC.classList.remove('hidden');
+            setTimeout(() => {
+                requiredCCC.classList.add('hidden');
+            }, 4000);
+            error.push(true)
+        }
+
+
+        if(error.includes(true)){
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+              });
+            return;
+        }
+
+
+        console.log(vessels.value)
+
+        let payload = {
+            Owner : claimOwner,
+            Claims_name	: claimsName,
+        //     Vessel_Name	: vessels.value,
+            Name : recordName.value, 
+            Club : accountID ,
+            Reimbursable_Expenses : reimbursement.value,
+            Club_Contact_name : clubCaseContact.value,
+            From : startTime.value,
+            To : endTime.value,
+            Note :noteContent.value ,
+            Trigger_workflow : true,
+        }
+
+
+
+        console.log(payload);
+
+        let createInvoice = await create("Books_Invoices",payload)
+   
+
+        let createdData = createInvoice.data.shift();
+
+
+ 
         
         if (createdData.code === "SUCCESS") {
-            let debitId = createdData.details.id;
+            let invoiceId = createdData.details.id;
 
-            fileAttachment("Book_Debit_Notes",debitId,debitFile)
+            addNotes("Books_Invoices",invoiceId,noteTitle.value,noteContent.value)
+            fileAttachment("Books_Invoices",invoiceId,file)
             let divAnchor = getElement('redirectButton');
             let alertMessage = getElement('createdSuccessfully');
             
@@ -179,17 +222,31 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
             }
             
             // Update the anchor properties
-            existingAnchor.href = `https://crm.zoho.com/crm/aqueous/tab/CustomModule12/${debitId}`;
+            existingAnchor.href = `https://crm.zoho.com/crm/aqueous/tab/CustomModule13/${invoiceId}`;
             existingAnchor.target = '_blank';
             existingAnchor.classList.add('text-blue-500');
             existingAnchor.textContent = 'Click here to redirect to Debit Note';
-            
+            submitDebit.disabled = true;
             alertMessage.classList.remove('hidden');
-            setTimeout(() => {
+            debitNoteForm.classList.add('hidden')
+            await reSize("179","400");
+            setTimeout(async ()  => {
                 alertMessage.classList.add('hidden');
-                debitNoteName.value = "";
-                debitNote.value = "";
-            }, 6000);
+                recordName.value = "";
+                noteTitle.value = "";
+                noteContent.value = "";
+                reimbursement.value = "";
+                getElement('Attachment').value = "";
+                vessels.value = "";
+                startTime.value = "";
+                endTime.value = "";
+                clubCaseContact.value = "";
+                debitNoteForm.classList.remove('hidden')
+                submitDebit.disabled = false;
+                await reSize("760","400");
+
+
+            }, 4000);
         }
 
         
@@ -205,9 +262,13 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
     // Cancel Button
     //============================================================================================================================ 
     
-        cancelButton.addEventListener("click",function (e) {
-            leaveRunning()
-        })
+    cancelButton.addEventListener("click",function (e) {
+        leaveRunning()
+    })
+
+    cancelButtonForm.addEventListener("click",function (e) {
+        leaveRunning()
+    })
 
 })
 ZOHO.embeddedApp.init();
