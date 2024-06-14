@@ -53,3 +53,7 @@ export let addNotes = async (module,recordId,TitleNote,Content) => {
    console.log(addnote)
 }
 
+
+export let reSize = async (heights,widths) => {
+    await ZOHO.CRM.UI.Resize({height:heights,width:widths})
+}

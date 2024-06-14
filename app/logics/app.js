@@ -1,4 +1,4 @@
-import {leaveRunning,moduleRecord,checkUserLogin,getContact,getCompany,closeReload,getRelatedRecords,fileAttachment,addNotes} from './components/util.js'
+import {leaveRunning,moduleRecord,checkUserLogin,getContact,getCompany,closeReload,getRelatedRecords,fileAttachment,addNotes,reSize} from './components/util.js'
 import {create} from './components/crud.js'
 
 
@@ -8,6 +8,7 @@ import {create} from './components/crud.js'
 let getElement = (id) => document.getElementById(id);
 let alertMessage = getElement('alert');
 let cancelButton = getElement('cancelButton');
+let cancelButtonForm = getElement('cancelButtonForm');
 let debitNoteForm = getElement('debitNoteForm');
 let closeModal = getElement('closeModalButton');
 let modal = getElement('my_modal_3');
@@ -35,8 +36,7 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
     let supplierCompanies = await getRelatedRecords("Deals",currentData.EntityId,"Vendors25");
     let supplierContact = await getRelatedRecords("Deals",currentData.EntityId,"Contact_Roles");
 
-    
-    console.log(supplierCompanies)
+
 
 
     //============================================================================================================================
@@ -55,6 +55,8 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
         if(  userDetails.id !== recordDetails.Owner.id ){
            await ZOHO.CRM.UI.Resize({height:"120",width:"400"})
            alertMessage.classList.remove('hidden');
+           debitNoteForm.classList.add('hidden')
+           document.body.style.overflow = 'hidden';
             setTimeout(() => {
                 leaveRunning()
               }, 5000);
@@ -152,8 +154,12 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
 
         let debitNoteName = getElement('debitNoteName');
         let debitNoteTitle = getElement('debitNoteTitle');
-        let contactSupplier = getElement('contactSupplier');
+        let submitDebit = getElement('submitDebit');
         let debitNote = getElement('debitNote');
+
+        let requiredSCN = getElement('requiredSCN');
+        let requiredSCP = getElement('requiredSCP');
+
         let debitFile = getElement('debitFile').files[0];
         let recordDetails = await moduleRecord("Deals",currentData.EntityId);
         let owner = recordDetails.Owner || ""
@@ -165,6 +171,26 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
         let debitNoteInput = debitNote.value;
         let supplierContact = selectContactSupplier.value;
         let supplierCompany = selectCompanySupplier.value;
+
+
+        if(!supplierCompany){
+            requiredSCN.classList.remove('hidden');
+            setTimeout(() => {
+                requiredSCN.classList.add('hidden');
+            }, 3000);
+            return;
+        }
+
+
+
+                    if (!supplierContact) {
+                requiredSCP.classList.remove('hidden');
+                setTimeout(() => {
+                    requiredSCP.classList.add('hidden');
+                }, 3000);
+                return;
+            }
+
         
         let payload = {
             Owner : owner.id,
@@ -180,6 +206,7 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
         let createBookDebitNotes = await create("Book_Debit_Notes",payload)
 
         let createdData = createBookDebitNotes.data.shift();
+        console.log(JSON.stringify(createdData))
         
         if (createdData.code === "SUCCESS") {
             let debitId = createdData.details.id;
@@ -202,9 +229,13 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
             existingAnchor.target = '_blank';
             existingAnchor.classList.add('text-blue-500');
             existingAnchor.textContent = 'Click here to redirect to Debit Note';
-            
+            submitDebit.disabled = true;
             alertMessage.classList.remove('hidden');
-            setTimeout(() => {
+            debitNoteForm.classList.add('hidden')
+            await reSize("179","400");
+            setTimeout( async () => {
+ 
+         
                 alertMessage.classList.add('hidden');
                 debitNoteName.value = "";
                 debitNoteTitle.value = "";
@@ -213,7 +244,10 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
                 selectContactSupplier.value = '';
                 getElement('debitFile').value = "";
                 contactSelect.classList.add('hidden');
-            }, 6000);
+                debitNoteForm.classList.remove('hidden')
+                submitDebit.disabled = false;
+                await reSize("660","400");
+            }, 4000);
         }
 
         
@@ -230,6 +264,10 @@ ZOHO.embeddedApp.on("PageLoad", async (data) => {
     //============================================================================================================================ 
     
         cancelButton.addEventListener("click",function (e) {
+            leaveRunning()
+        })
+
+        cancelButtonForm.addEventListener("click",function (e) {
             leaveRunning()
         })
 
